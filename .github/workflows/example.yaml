@@ -1,0 +1,26 @@
+on:
+  push:
+  pull_request:
+
+jobs:
+  skip-1:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This should be skipped"
+    if: false
+
+  all-green:
+    needs: [ skip-1 ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          allowed-skips: skip-1
+          jobs: ${{ toJSON(needs) }}
+    if: always()
+
+  run-this:
+    needs: [ all-green ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This must execute"
