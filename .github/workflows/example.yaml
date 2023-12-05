@@ -24,3 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "This must execute"
+
+  pass:
+    needs: [ run-this ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
+    if: always()
